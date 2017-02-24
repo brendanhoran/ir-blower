@@ -6,7 +6,7 @@ from gi.repository import Gtk
 
 
 builder = Gtk.Builder()
-builder.add_from_file("client-nb.glade")
+builder.add_from_file("../conf/ir-blower-client.glade")
 
 
 class dict_unpack:
@@ -14,7 +14,7 @@ class dict_unpack:
         self.__dict__.update(entries)
 
 def read_config():
-    with open('config.yaml', 'r') as config_file:
+    with open('../conf/config.yaml', 'r') as config_file:
         settings = yaml.safe_load(config_file)
 
     global config_settings

@@ -17,7 +17,7 @@ class dict_unpack:
 
 
 def read_config():
-    with open('config.yaml', 'r') as config_file:
+    with open('../conf/config.yaml', 'r') as config_file:
         settings = yaml.safe_load(config_file)
 
     global config_settings
