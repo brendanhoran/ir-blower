@@ -1,6 +1,6 @@
 #!/usr/bin/python
 
-import gi, requests, yaml
+import gi, requests, yaml, sys, os
 gi.require_version('Gtk', '3.0')
 from gi.repository import Gtk
 
@@ -14,8 +14,12 @@ class dict_unpack:
         self.__dict__.update(entries)
 
 def read_config():
-    with open('../conf/config.yaml', 'r') as config_file:
-        settings = yaml.safe_load(config_file)
+    try:
+        with open('../conf/config.yaml', 'r') as config_file:
+            settings = yaml.safe_load(config_file)
+    except IOError:
+        syslog.syslog(syslog.LOG_CRIT, "Failed to read ir-blower config")
+        sys.exit(os.EX_IOERR)
 
     global config_settings
     config_settings = dict_unpack(**settings)
@@ -47,7 +51,8 @@ class Handler:
                 data = {'data':'vol_down'})
 
     def gain_selection_click(self, button):
-        print("gain event")
+        rest_request = requests.put(rest_url+"/misc",\
+                data = {'data':'gain_sel'})
 
     def input_usb_click(self, button):
         rest_request = requests.put(rest_url+"/in_ctl",\

@@ -3,13 +3,14 @@
 # EG client
 # curl -X put -d data=vol_up  http://127.0.0.1:8080/irblower/vol_ctl
 
-import serial, yaml
+import serial, yaml, syslog, sys, os
 from flask import Flask, request
 from flask_restful import Resource, Api
 
 app = Flask("ir-blower-server")
 api = Api(app)
 
+syslog.openlog(logoption=syslog.LOG_PID)
 
 class dict_unpack:
     def __init__(self, **entries):
@@ -17,8 +18,12 @@ class dict_unpack:
 
 
 def read_config():
-    with open('../conf/config.yaml', 'r') as config_file:
-        settings = yaml.safe_load(config_file)
+    try:
+        with open('../conf/config.yaml', 'r') as config_file:
+             settings = yaml.safe_load(config_file)
+    except IOError:
+        syslog.syslog(syslog.LOG_CRIT, "Failed to read ir-blower config")
+        sys.exit(os.EX_IOERR) 
 
     global config_settings
     config_settings = dict_unpack(**settings)
@@ -41,8 +46,7 @@ class device_volume(Resource):
              elif command == "vol_mute":
                  print("mute event")
              else:
-                 print("shit")
-                 return {"brr": "brr"}
+                 syslog.syslog(syslog.LOG_ERR, "invalid data sent to server")
 
          change_vol(command)
 
@@ -54,7 +58,7 @@ class device_power(Resource):
             if command == "pwr_event":
                 print("power event")
             else:
-                print("power shit")
+                syslog.syslog(syslog.LOG_ERR, "invalid data sent to server")
 
         change_power(command)
 
@@ -78,16 +82,30 @@ class device_input(Resource):
             elif command == "in_coax2":
                 print("input coax 2")
             else:
-                print("input shit")
+                syslog.syslog(syslog.LOG_ERR, "invalid data sent to server")
 
         change_input(command)
 
+class device_misc(Resource):
+    def put(self):
+        command = request.form['data']
+
+        def misc_commands(command):
+            if command == "gain_sel":
+                print("gain event")
+            else:
+                syslog.syslog(syslog.LOG_ERR, "invalid data sent to server")
+
+        misc_commands(command)
+
+def run_server():
+    api.add_resource(server_info, '/irblower/')
+    api.add_resource(device_volume, '/irblower/vol_ctl')
+    api.add_resource(device_power, '/irblower/pwr_ctl')
+    api.add_resource(device_input, '/irblower/in_ctl')
+    api.add_resource(device_misc, '/irblower/misc')
+    syslog.syslog("Staring it-blower server")
+    app.run(host=config_settings.server_address, port=config_settings.port, debug=True)
 
 read_config()
-
-api.add_resource(server_info, '/irblower/')
-api.add_resource(device_volume, '/irblower/vol_ctl')
-api.add_resource(device_power, '/irblower/pwr_ctl')
-api.add_resource(device_input, '/irblower/in_ctl')
-
-app.run(host=config_settings.server_address, port=config_settings.port, debug=True)
+run_server()
