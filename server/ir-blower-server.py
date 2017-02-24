@@ -23,7 +23,7 @@ def read_config():
              settings = yaml.safe_load(config_file)
     except IOError:
         syslog.syslog(syslog.LOG_CRIT, "Failed to read ir-blower config")
-        sys.exit(os.EX_IOERR) 
+        sys.exit(os.EX_IOERR)
 
     config_settings = dict_unpack(**settings)
     return(config_settings)
@@ -43,13 +43,15 @@ class device_volume(Resource):
          def change_vol(command):
              if command == "vol_down":
                  print("vol_down")
-                 serial.write(b'f')
+                 serial.write(b"5")
              elif command == "vol_up":
                  print("vol_up")
+                 serial.write(b"4")
              elif command == "vol_mute":
                  print("mute event")
+                 serial.write(b"3")
              else:
-                 syslog.syslog(syslog.LOG_ERR, "invalid data sent to server")
+                 syslog.syslog(syslog.LOG_ERR, "Invalid data sent to server")
 
          change_vol(command)
          serial.close()
@@ -63,8 +65,9 @@ class device_power(Resource):
         def change_power(command):
             if command == "pwr_event":
                 print("power event")
+                serial.write(b"6")
             else:
-                syslog.syslog(syslog.LOG_ERR, "invalid data sent to server")
+                syslog.syslog(syslog.LOG_ERR, "Invalid data sent to server")
 
         change_power(command)
         serial.close()
@@ -78,20 +81,27 @@ class device_input(Resource):
         def change_input(command):
             if command == "in_nxt":
                 print("input next")
+                serial.write(b"1")
             elif command == "in_prev":
                 print("input prev")
+                serial.write(b"2")
             elif command == "in_usb":
                 print("input usb")
+                serial.write(b"a")
             elif command == "in_opt1":
                 print("input optical 1")
+                serial.write(b"d")
             elif command == "in_opt2":
                 print("input optical 2")
+                serial.write(b"e")
             elif command == "in_coax1":
                 print("input coax 1")
+                serial.write(b"b")
             elif command == "in_coax2":
                 print("input coax 2")
+                serial.write(b"c")
             else:
-                syslog.syslog(syslog.LOG_ERR, "invalid data sent to server")
+                syslog.syslog(syslog.LOG_ERR, "Invalid data sent to server")
 
         change_input(command)
         serial.close()
@@ -105,8 +115,9 @@ class device_misc(Resource):
         def misc_commands(command):
             if command == "gain_sel":
                 print("gain event")
+                serial.write(b"f")
             else:
-                syslog.syslog(syslog.LOG_ERR, "invalid data sent to server")
+                syslog.syslog(syslog.LOG_ERR, "Invalid data sent to server")
 
         misc_commands(command)
         serial.close()
@@ -134,7 +145,7 @@ def test_serial():
         serial.open()
         serial.close()
     except:
-        syslog.syslog(syslog.LOG_CRIT, "failed to open serial device")
+        syslog.syslog(syslog.LOG_CRIT, "Failed to open serial device")
         sys.exit(os.EX_UNAVAILABLE)
 
 
