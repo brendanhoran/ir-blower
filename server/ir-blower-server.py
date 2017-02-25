@@ -44,17 +44,19 @@ class device_volume(Resource):
              if command == "vol_down":
                  print("vol_down")
                  serial.write(b"5")
+                 serial.close()
              elif command == "vol_up":
                  print("vol_up")
+                 serial.close()
                  serial.write(b"4")
              elif command == "vol_mute":
                  print("mute event")
                  serial.write(b"3")
+                 serial.close()
              else:
                  syslog.syslog(syslog.LOG_ERR, "Invalid data sent to server")
 
          change_vol(command)
-         serial.close()
 
 class device_power(Resource):
     def put(self):
@@ -66,11 +68,11 @@ class device_power(Resource):
             if command == "pwr_event":
                 print("power event")
                 serial.write(b"6")
+                serial.close()
             else:
                 syslog.syslog(syslog.LOG_ERR, "Invalid data sent to server")
 
         change_power(command)
-        serial.close()
 
 class device_input(Resource):
     def put(self):
@@ -82,29 +84,35 @@ class device_input(Resource):
             if command == "in_nxt":
                 print("input next")
                 serial.write(b"1")
+                serial.close()
             elif command == "in_prev":
                 print("input prev")
                 serial.write(b"2")
+                serial.close()
             elif command == "in_usb":
                 print("input usb")
                 serial.write(b"a")
+                serial.close()
             elif command == "in_opt1":
                 print("input optical 1")
                 serial.write(b"d")
+                serial.close()
             elif command == "in_opt2":
                 print("input optical 2")
                 serial.write(b"e")
+                serial.close()
             elif command == "in_coax1":
                 print("input coax 1")
                 serial.write(b"b")
+                serial.close()
             elif command == "in_coax2":
                 print("input coax 2")
                 serial.write(b"c")
+                serial.close()
             else:
                 syslog.syslog(syslog.LOG_ERR, "Invalid data sent to server")
 
         change_input(command)
-        serial.close()
 
 class device_misc(Resource):
     def put(self):
@@ -116,11 +124,11 @@ class device_misc(Resource):
             if command == "gain_sel":
                 print("gain event")
                 serial.write(b"f")
+                serial.close()
             else:
                 syslog.syslog(syslog.LOG_ERR, "Invalid data sent to server")
 
         misc_commands(command)
-        serial.close()
 
 def run_server():
     config = read_config()
