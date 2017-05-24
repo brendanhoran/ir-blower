@@ -19,7 +19,7 @@ class dict_unpack:
 
 def read_config():
     try:
-        with open('../etc/ir-blower.conf', 'r') as config_file:
+        with open('../conf/config.yaml', 'r') as config_file:
              settings = yaml.safe_load(config_file)
     except IOError:
         syslog.syslog(syslog.LOG_CRIT, "Failed to read ir-blower config")
