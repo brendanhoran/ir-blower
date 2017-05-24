@@ -1,4 +1,8 @@
 #!/usr/bin/python
+# License : BSD 3-Clause
+# Version : 0.0.1
+# Author  : Brendan Horan
+
 
 import gi, requests, yaml, sys, os
 gi.require_version('Gtk', '3.0')
