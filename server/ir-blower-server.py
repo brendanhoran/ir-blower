@@ -1,6 +1,9 @@
 #!/usr/bin/python
+# License : BSD 3-Clause
+# Version :0.0.1
+# Author  : Brendan Horan
 
-# EG client
+# example to raise volume 
 # curl -X put -d data=vol_up  http://127.0.0.1:8080/irblower/vol_ctl
 
 import serial, yaml, syslog, sys, os
