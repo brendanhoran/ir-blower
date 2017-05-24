@@ -19,7 +19,7 @@ class dict_unpack:
 
 def read_config():
     try:
-        with open('../conf/config.yaml', 'r') as config_file:
+        with open('../etc/ir-blower.conf', 'r') as config_file:
              settings = yaml.safe_load(config_file)
     except IOError:
         syslog.syslog(syslog.LOG_CRIT, "Failed to read ir-blower config")
@@ -47,8 +47,8 @@ class device_volume(Resource):
                  serial.close()
              elif command == "vol_up":
                  print("vol_up")
-                 serial.close()
                  serial.write(b"4")
+                 serial.close()
              elif command == "vol_mute":
                  print("mute event")
                  serial.write(b"3")
@@ -138,7 +138,7 @@ def run_server():
     api.add_resource(device_input, '/irblower/in_ctl')
     api.add_resource(device_misc, '/irblower/misc')
     syslog.syslog("Starting ir-blower")
-    app.run(host=config.server_address, port=config.port, debug=True)
+    app.run(host=config.server_address, port=config.port, debug=False)
 
 def open_serial():
     config = read_config()

@@ -34,8 +34,11 @@ def url_format():
 class Handler:
     rest_url = url_format()
     def power_button_click(self, button):
-        rest_request = requests.put(Handler.rest_url+"/pwr_ctl",\
-                data = {'data':'pwr_event'})
+        try:
+            query = rest_request = requests.put(Handler.rest_url+"/pwr_ctl",\
+                    data = {'data':'pwr_event'})
+        except requests.exceptions.RequestException as error:
+            print(error)
 
     def input_next_button_click(self, button):
         rest_request = requests.put(Handler.rest_url+"/in_ctl",\
