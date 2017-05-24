@@ -45,15 +45,12 @@ class device_volume(Resource):
 
          def change_vol(command):
              if command == "vol_down":
-                 print("vol_down")
                  serial.write(b"5")
                  serial.close()
              elif command == "vol_up":
-                 print("vol_up")
                  serial.write(b"4")
                  serial.close()
              elif command == "vol_mute":
-                 print("mute event")
                  serial.write(b"3")
                  serial.close()
              else:
@@ -69,7 +66,6 @@ class device_power(Resource):
 
         def change_power(command):
             if command == "pwr_event":
-                print("power event")
                 serial.write(b"6")
                 serial.close()
             else:
@@ -85,31 +81,24 @@ class device_input(Resource):
 
         def change_input(command):
             if command == "in_nxt":
-                print("input next")
                 serial.write(b"1")
                 serial.close()
             elif command == "in_prev":
-                print("input prev")
                 serial.write(b"2")
                 serial.close()
             elif command == "in_usb":
-                print("input usb")
                 serial.write(b"a")
                 serial.close()
             elif command == "in_opt1":
-                print("input optical 1")
                 serial.write(b"d")
                 serial.close()
             elif command == "in_opt2":
-                print("input optical 2")
                 serial.write(b"e")
                 serial.close()
             elif command == "in_coax1":
-                print("input coax 1")
                 serial.write(b"b")
                 serial.close()
             elif command == "in_coax2":
-                print("input coax 2")
                 serial.write(b"c")
                 serial.close()
             else:
@@ -125,7 +114,6 @@ class device_misc(Resource):
 
         def misc_commands(command):
             if command == "gain_sel":
-                print("gain event")
                 serial.write(b"f")
                 serial.close()
             else:
