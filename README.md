@@ -38,4 +38,7 @@ Uses Glade to configure the UI.
 Glade config is "ir-blower-client.glade"  
 
 
+## TODO   
 
+* add a .desktop link for the UI
+* in client UI make the "about" tab usefull vs static
