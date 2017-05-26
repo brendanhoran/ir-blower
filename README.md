@@ -33,6 +33,12 @@ The following options are supported :
 
 Note : server_address and port are used in both client and server.   
 
+
+## Example rest commands    
+
+TODO  
+
+
 ## Desktop app
 Uses Glade to configure the UI.   
 Glade config is "ir-blower-client.glade"  
